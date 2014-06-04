@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.support.ui.Select
 
 /**
  * SeleniumUtilityTrait.
@@ -21,6 +22,8 @@ import org.openqa.selenium.JavascriptExecutor
  * @author nekopiano
  */
 trait SeleniumUtilityTrait {
+
+  // element operations
 
   def waitVisibility(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver): Unit = {
     waitVisibilityBy(By.xpath(xPath), sec)
@@ -109,21 +112,25 @@ trait SeleniumUtilityTrait {
     getFirstElement(by)
   }
 
+  // miscellaneous
+
+  def generateSelect(element: WebElement) = new Select(element)
+
+  def takeScreenShot(baseImageDirPath: String, testName: String)(implicit driver: RemoteWebDriver) {
+    ScreenShooter.takeScreenShot(baseImageDirPath, testName)
+  }
+
+  // move operations
+
   def hoverElement(element: WebElement)(implicit driver: RemoteWebDriver) = {
     val actions = new Actions(driver)
     actions.moveToElement(element).perform
     element
   }
 
-  def takeScreenShot(baseImageDirPath: String, testName: String)(implicit driver: RemoteWebDriver) {
-    ScreenShooter.takeScreenShot(baseImageDirPath, testName)
-  }
-
-  // miscellaneous
-
   def scroll(horizontal: Int = 0, vertical: Int = 0)(implicit driver: RemoteWebDriver) {
     val jsExe = driver.asInstanceOf[JavascriptExecutor]
-    // doesn't work...
+    // The following doesn't work...
     // jsExe.executeScript("javascript:document.getElementsByClassName('sectionheader')[2].scrollIntoView(true);");
     jsExe.executeScript("window.scrollBy(" + horizontal + "," + vertical + ");");
   }
