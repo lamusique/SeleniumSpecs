@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2013-2014 nekopiano
  * All rights reserved.
+ * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 

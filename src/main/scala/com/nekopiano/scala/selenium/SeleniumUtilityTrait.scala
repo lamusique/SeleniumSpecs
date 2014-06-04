@@ -1,6 +1,7 @@
 /**
- * Copyright (c) 2013-2014 nekopiano
+ * Copyright (c) 2013-2014 nekopiano, Neko Piano
  * All rights reserved.
+ * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 
