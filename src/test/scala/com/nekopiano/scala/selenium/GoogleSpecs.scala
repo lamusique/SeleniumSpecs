@@ -28,9 +28,6 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
   // This prevents parallel execution.
   sequential
 
-  var baseImageDirPath = ""
-  var driver: RemoteWebDriver = null
-
   trait scope extends Scope with After {
     // pre process
     val currentPath = System.getProperty("user.dir")
@@ -44,9 +41,9 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     driver.manage.window.setSize(new Dimension(1024, 768))
 
     val q = "TC-01"
-    baseImageDirPath = currentPath + "\\ScreenShots\\" + q
+    screenShotsBaseDirPath = currentPath + "\\ScreenShots\\" + q
 
-    val imageDir = new File(baseImageDirPath)
+    val imageDir = new File(screenShotsBaseDirPath)
     if (!imageDir.exists) {
       imageDir.mkdir
       System.out.println("Create Folder:" + imageDir.getPath())
@@ -65,20 +62,22 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
       val testName = "view-google"
 
-      implicit val implicitDriver: RemoteWebDriver = driver
-
       //driver.get("http://www.google.com")     
       go to "http://www.google.com"
-      
+
       waitVisibility("//div[@title='Google']")
-      takeScreenShot(baseImageDirPath, testName)
+      takeScreenShot(testName)
 
       val form = waitAndGetFirstElement("//input[@id='gbqfq']")
       form.sendKeys("nekopiano")
       waitAndGetFirstElement("//button[@id='gbqfb']").click
 
       waitVisibility("//table[@id='nav']")
-      takeScreenShot(baseImageDirPath, testName)
+      takeScreenShot(testName)
+
+      scroll(1400)
+      waitVisibility("//td[@class='b navend']")
+      takeScreenShot(testName)
     }
   }
 

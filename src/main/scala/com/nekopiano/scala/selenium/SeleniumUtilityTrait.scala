@@ -23,6 +23,9 @@ import org.openqa.selenium.support.ui.Select
  */
 trait SeleniumUtilityTrait {
 
+  implicit var screenShotsBaseDirPath = ""
+  implicit var driver: RemoteWebDriver = null
+
   // element operations
 
   def waitVisibility(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver): Unit = {
@@ -114,10 +117,10 @@ trait SeleniumUtilityTrait {
 
   // miscellaneous
 
-  def generateSelect(element: WebElement) = new Select(element)
+  def createSelect(element: WebElement) = new Select(element)
 
-  def takeScreenShot(baseImageDirPath: String, testName: String)(implicit driver: RemoteWebDriver) {
-    ScreenShooter.takeScreenShot(baseImageDirPath, testName)
+  def takeScreenShot(testName: String)(implicit driver: RemoteWebDriver) {
+    ScreenShooter.takeScreenShot(screenShotsBaseDirPath, testName)
   }
 
   // move operations
@@ -128,7 +131,7 @@ trait SeleniumUtilityTrait {
     element
   }
 
-  def scroll(horizontal: Int = 0, vertical: Int = 0)(implicit driver: RemoteWebDriver) {
+  def scroll(vertical: Int = 0, horizontal: Int = 0)(implicit driver: RemoteWebDriver) {
     val jsExe = driver.asInstanceOf[JavascriptExecutor]
     // The following doesn't work...
     // jsExe.executeScript("javascript:document.getElementsByClassName('sectionheader')[2].scrollIntoView(true);");
