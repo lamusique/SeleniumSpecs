@@ -6,15 +6,21 @@
 package com.nekopiano.scala.selenium
 
 import org.junit.runner.RunWith
+import org.openqa.selenium.Keys
 import org.specs2.mutable.Specification
-import org.specs2.runner.JUnitRunner
+
+import scala.util.matching.Regex
+//import org.specs2.runner.JUnitRunner
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.specs2.specification.Scope
 import org.specs2.mutable.After
-import java.io.File
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
+
+import better.files._
+import java.io.{File => JFile}
+
 
 /**
  * GoogleSpecs.<br>
@@ -22,18 +28,27 @@ import org.openqa.selenium.Point
  *
  * @author nekopiano
  */
-@RunWith(classOf[JUnitRunner])
+//@RunWith(classOf[JUnitRunner])
 class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
   // This prevents parallel execution.
   sequential
 
+  lazy val currentOS = OS.currentOS
+
   trait scope extends Scope with After {
     // pre process
     val currentPath = System.getProperty("user.dir")
 
+    val path = currentOS match {
+      case OS.Mac => "/webdrivers/chromedriver"
+      case OS.Windows => "\\webdrivers\\chromedriver.exe"
+      case OS.Linux => "/webdrivers/chromedriver"
+      case _ => "/webdrivers/chromedriver"
+    }
+
     System.setProperty("webdriver.chrome.driver",
-      currentPath + "\\webdrivers\\chromedriver.exe")
+      currentPath + path)
     driver = new ChromeDriver()
 
     driver.manage.window.maximize
@@ -41,12 +56,13 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     driver.manage.window.setSize(new Dimension(1024, 768))
 
     val q = "TC-01"
-    screenShotsBaseDirPath = currentPath + "\\ScreenShots\\" + q
+    screenShotsBaseDirPath = currentPath + currentOS.separator + "ScreenShots" + currentOS.separator + q
 
-    val imageDir = new File(screenShotsBaseDirPath)
+    val imageDir = File(screenShotsBaseDirPath)
     if (!imageDir.exists) {
-      imageDir.mkdir
-      System.out.println("Create Folder:" + imageDir.getPath())
+      Cmds.mkdirs(imageDir)
+
+      System.out.println("Create Folder:" + imageDir.path)
     }
 
     def after = {
@@ -65,12 +81,13 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
       //driver.get("http://www.google.com")     
       go to "http://www.google.com"
 
-      waitVisibility("//div[@title='Google']")
+      waitVisibility("//div[@id='hplogo']")
       takeScreenShot(testName)
 
-      val form = waitAndGetFirstElement("//input[@id='gbqfq']")
+      val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
-      waitAndGetFirstElement("//button[@id='gbqfb']").click
+      //waitAndGetFirstElement("//input[@name='btnK']").click
+      form.sendKeys(Keys.RETURN)
 
       waitVisibility("//table[@id='nav']")
       takeScreenShot(testName)
