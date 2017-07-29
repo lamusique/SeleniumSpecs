@@ -1,17 +1,13 @@
 /**
- * Copyright (c) 2013-2014 nekopiano, Neko Piano
+ * Copyright (c) 2013 nekopiano, Neko Piano
  * All rights reserved.
  * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 
-import org.junit.runner.RunWith
 import org.openqa.selenium.Keys
 import org.specs2.mutable.Specification
 
-import scala.util.matching.Regex
-//import org.specs2.runner.JUnitRunner
-import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.specs2.specification.Scope
 import org.specs2.mutable.After
@@ -19,7 +15,7 @@ import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
 
 import better.files._
-import java.io.{File => JFile}
+import better.files.Dsl._
 
 
 /**
@@ -60,7 +56,7 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
     val imageDir = File(screenShotsBaseDirPath)
     if (!imageDir.exists) {
-      Cmds.mkdirs(imageDir)
+      mkdirs(imageDir)
 
       System.out.println("Create Folder:" + imageDir.path)
     }

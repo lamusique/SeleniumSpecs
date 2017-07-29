@@ -1,11 +1,10 @@
 /**
- * Copyright (c) 2013-2014 nekopiano, Neko Piano
+ * Copyright (c) 2013 nekopiano, Neko Piano
  * All rights reserved.
  * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 
-import scala.collection.JavaConversions.asScalaBuffer
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
