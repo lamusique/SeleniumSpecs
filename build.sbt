@@ -18,6 +18,9 @@ libraryDependencies += "org.seleniumhq.selenium" % "selenium-support" % "3.4.0" 
 
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.0.0" withSources()
 
+libraryDependencies += "org.typelevel" %% "cats" % "0.9.0" withSources()
+
+
 scalacOptions in Test ++= Seq("-Yrangepos")
 
 

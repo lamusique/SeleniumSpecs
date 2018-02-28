@@ -118,8 +118,9 @@ trait SeleniumUtilityTrait {
 
   def createSelect(element: WebElement) = new Select(element)
 
+  @deprecated
   def takeScreenShot(testName: String)(implicit driver: RemoteWebDriver) {
-    ScreenShooter.takeScreenShot(screenShotsBaseDirPath, testName)
+    //ScreenShooter.takeScreenShot(screenShotsBaseDirPath, testName)
   }
 
   // move operations

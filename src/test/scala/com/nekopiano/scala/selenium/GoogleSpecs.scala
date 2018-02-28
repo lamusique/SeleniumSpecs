@@ -33,8 +33,6 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
   lazy val currentOS = OS.currentOS
 
   trait scope extends Scope with After {
-    // pre process
-    val currentPath = System.getProperty("user.dir")
 
     val path = currentOS match {
       case OS.Mac => "/webdrivers/chromedriver"
@@ -44,7 +42,7 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     }
 
     System.setProperty("webdriver.chrome.driver",
-      currentPath + path)
+      OS.currentPath + path)
     driver = new ChromeDriver()
 
     driver.manage.window.maximize
@@ -52,7 +50,7 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     driver.manage.window.setSize(new Dimension(1024, 768))
 
     val q = "TC-01"
-    screenShotsBaseDirPath = currentPath + currentOS.separator + "ScreenShots" + currentOS.separator + q
+    screenShotsBaseDirPath = OS.currentPath + currentOS.separator + "ScreenShots" + currentOS.separator + q
 
     val imageDir = File(screenShotsBaseDirPath)
     if (!imageDir.exists) {
