@@ -1,57 +1,42 @@
 /**
- * Copyright (c) 2013-2017 nekopiano, Neko Piano
+ * Copyright (c) 2013-2014 nekopiano, Neko Piano
  * All rights reserved.
  * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 
+import java.util.concurrent.atomic.AtomicInteger
+
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.OutputType
 import better.files._
-import java.io.{File => JFile}
-import java.util.concurrent.atomic.AtomicInteger
-
-import better.files.Dsl.mkdirs
+import better.files.Dsl._
 
 /**
  * ScreenShooter.
  *
  * @author nekopiano
  */
-case class ScreenShooter(baseDirPath: String, testName: String) {
-
-  // init the directory
-  mkdir(baseDirPath)
+case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit driver: RemoteWebDriver) {
 
   object Counter {
-    val counter = new AtomicInteger(0)
-    def count(): Int = {
-      counter.addAndGet(1)
-    }
+    val counter = new AtomicInteger()
+    def count(): Int = counter.incrementAndGet()
     def countFixedDigit(): String = {
-      counter.addAndGet(1)
-      "%03d".format(counter)
+      "%03d".format(counter.incrementAndGet())
     }
   }
 
-  def takeScreenShot()(implicit driver: RemoteWebDriver) {
+  def takeScreenShot() {
     val takesScreenShot = driver.asInstanceOf[TakesScreenshot]
-    val scrFile = takesScreenShot.getScreenshotAs(OutputType.FILE)
-    println("scrFile: " + scrFile)
-    val tarFileName = baseDirPath + '/' + testName + '-' + Counter.countFixedDigit + ".png"
-    scrFile.toScala.copyTo(File(tarFileName))
+    val srcBytes = takesScreenShot.getScreenshotAs(OutputType.BYTES)
 
-    println("shot: " + tarFileName)
-  }
+    val file = baseImageDirPath / (testName + '-' + Counter.countFixedDigit + ".png")
+    file.touch()
+    file.writeBytes(srcBytes.iterator)
 
-  def mkdir(path:String): Unit ={
-    val imageDir = File(path)
-    if (!imageDir.exists) {
-      mkdirs(imageDir)
-      // TODO logger
-      System.out.println("Create Folder:" + imageDir.path)
-    }
+    println("shot: " + file)
   }
 
 }

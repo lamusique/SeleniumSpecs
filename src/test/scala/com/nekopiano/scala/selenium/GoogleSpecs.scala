@@ -1,19 +1,15 @@
 /**
- * Copyright (c) 2013 nekopiano, Neko Piano
+ * Copyright (c) 2013-2018 nekopiano, Neko Piano
  * All rights reserved.
  * http://www.nekopiano.com
  */
 package com.nekopiano.scala.selenium
 
-import org.openqa.selenium.Keys
-import org.specs2.mutable.Specification
-
+import org.specs2.mutable.{After, Before, Specification}
 import org.openqa.selenium.chrome.ChromeDriver
 import org.specs2.specification.Scope
-import org.specs2.mutable.After
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
-
 import better.files._
 import better.files.Dsl._
 
@@ -53,10 +49,10 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     screenShotsBaseDirPath = OS.currentPath + currentOS.separator + "ScreenShots" + currentOS.separator + q
 
     val imageDir = File(screenShotsBaseDirPath)
+//      imageDir.createIfNotExists(createParents = true)
     if (!imageDir.exists) {
       mkdirs(imageDir)
-
-      System.out.println("Create Folder:" + imageDir.path)
+      System.out.println("Create Folder:" + imageDir)
     }
 
     def after = {
@@ -70,25 +66,24 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
     "be searched" in new scope {
 
-      val testName = "view-google"
+      val screenShooter = ScreenShooter("view-google", screenShotsBaseDirPath)
 
       //driver.get("http://www.google.com")     
       go to "http://www.google.com"
 
-      waitVisibility("//div[@id='hplogo']")
-      takeScreenShot(testName)
+      waitVisibility("//img[@id='hplogo']")
+      screenShooter.takeScreenShot()
 
       val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
-      //waitAndGetFirstElement("//input[@name='btnK']").click
-      form.sendKeys(Keys.RETURN)
+      waitAndGetFirstElement("//input[@name='btnK']").submit
 
-      waitVisibility("//table[@id='nav']")
-      takeScreenShot(testName)
+      waitVisibility("//div[@id='search']")
+      screenShooter.takeScreenShot()
 
       scroll(1400)
       waitVisibility("//td[@class='b navend']")
-      takeScreenShot(testName)
+      screenShooter.takeScreenShot()
     }
   }
 

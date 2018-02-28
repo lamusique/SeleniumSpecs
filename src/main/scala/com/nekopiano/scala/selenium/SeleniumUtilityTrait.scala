@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2013 nekopiano, Neko Piano
+ * Copyright (c) 2013-2018 nekopiano, Neko Piano
  * All rights reserved.
  * http://www.nekopiano.com
  */
@@ -83,7 +83,6 @@ trait SeleniumUtilityTrait {
   }
 
   def existsElement(driver: RemoteWebDriver, xPath: String) = {
-    import collection.JavaConversions._
     val element = driver.findElements(By.xpath(xPath))
     println("check element=" + element)
     !element.isEmpty
@@ -117,11 +116,6 @@ trait SeleniumUtilityTrait {
   // miscellaneous
 
   def createSelect(element: WebElement) = new Select(element)
-
-  @deprecated
-  def takeScreenShot(testName: String)(implicit driver: RemoteWebDriver) {
-    //ScreenShooter.takeScreenShot(screenShotsBaseDirPath, testName)
-  }
 
   // move operations
 
