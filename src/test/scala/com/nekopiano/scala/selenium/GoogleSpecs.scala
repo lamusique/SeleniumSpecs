@@ -75,7 +75,10 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
       go to "http://www.google.com"
 
       waitVisibility("//img[@id='hplogo']")
+      screenShooter.takeScreenShot()
+      screenShooter.takeScreenShot(true)
       screenShooter.takeScreenShot("open a Google front page")
+      screenShooter.takeScreenShot("日本語: グーグル")
 
       val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
