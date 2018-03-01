@@ -20,11 +20,7 @@ libraryDependencies += "org.seleniumhq.selenium" % "selenium-support" % "3.9.1" 
 
 libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.4.0" withSources()
 
-//libraryDependencies ++= List(
-////  "org.specs2" %% "specs2" % "2.3.12" % "test"
-//  "org.specs2" %% "specs2" % "2.3.12",
-//  "org.seleniumhq.selenium" % "selenium-java" % "2.42.0",
-//  "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.3"
-//)
+libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "2.18.0" withSources()
+
 
 scalacOptions in Test ++= Seq("-Yrangepos")

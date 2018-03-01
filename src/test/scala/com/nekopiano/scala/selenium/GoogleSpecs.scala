@@ -66,24 +66,25 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
     "be searched" in new scope {
 
-      val screenShooter = ScreenShooter("view-google", screenShotsBaseDirPath)
+      val testName = "view-google"
+      val screenShooter = ScreenShooter(testName, screenShotsBaseDirPath)
 
       //driver.get("http://www.google.com")     
       go to "http://www.google.com"
 
       waitVisibility("//img[@id='hplogo']")
-      screenShooter.takeScreenShot()
+      screenShooter.takeScreenShot("open a Google front page")
 
       val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
       waitAndGetFirstElement("//input[@name='btnK']").submit
 
       waitVisibility("//div[@id='search']")
-      screenShooter.takeScreenShot()
+      screenShooter.takeScreenShot("search")
 
       scroll(1400)
       waitVisibility("//td[@class='b navend']")
-      screenShooter.takeScreenShot()
+      screenShooter.takeScreenShot("search results")
     }
   }
 
