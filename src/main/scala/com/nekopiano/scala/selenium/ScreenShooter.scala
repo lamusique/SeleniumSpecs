@@ -44,14 +44,11 @@ case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit dr
     import javax.imageio.ImageIO
     val bufferedImage = ImageIO.read(new ByteArrayInputStream(bytes))
 
-    //val g = ashot.getImage.getGraphics
     val g = bufferedImage.getGraphics
     import java.awt.{Color, Font}
     g.setColor(Color.red)
     g.setFont(new Font("SansSerif", Font.BOLD, 21))
     val startLocaleTimestamp = DateTimeFormat.forPattern("HH:mm:ss dd MMM yyyy").withLocale(Locale.UK).print(shotDateTime)
-    //      g.drawString(startLocaleTimestamp, bufferedImage.getWidth - 400, bufferedImage.getHeight -25)
-    //      g.drawRect(bufferedImage.getWidth - 410, bufferedImage.getHeight -60, 270, 40)
     g.drawString(startLocaleTimestamp, bufferedImage.getWidth - 400, 25)
     g.drawRect(bufferedImage.getWidth - 410, 5, 270, 30)
     val optMessage = Option(message) match {
@@ -64,17 +61,9 @@ case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit dr
     g.dispose()
 
 
-    //file.writeBytes(bytes.iterator)
-
-    //val imageBytes = bufferedImage.getData.getDataBuffer.asInstanceOf[DataBufferByte].getData
-    //file.writeBytes(imageBytes.iterator)
-
-
     val file = baseImageDirPath / (testNo + ".png")
-    // file.touch()
     import javax.imageio.ImageIO
     ImageIO.write(bufferedImage, "png", file.toJava)
-    // file.writeBytes(bytes.iterator)
 
     println("shot: " + file)
   }
