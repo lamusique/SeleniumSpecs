@@ -14,8 +14,7 @@ import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.OutputType
 import better.files._
 import better.files.Dsl._
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
+import com.github.nscala_time.time.Imports._
 
 /**
  * ScreenShooter.
