@@ -15,13 +15,14 @@ import org.openqa.selenium.OutputType
 import better.files._
 import better.files.Dsl._
 import com.github.nscala_time.time.Imports._
+import com.typesafe.scalalogging.LazyLogging
 
 /**
  * ScreenShooter.
  *
  * @author nekopiano
  */
-case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit driver: RemoteWebDriver) {
+case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit driver: RemoteWebDriver) extends LazyLogging {
 
   object Counter {
     val counter = new AtomicInteger()
@@ -64,7 +65,7 @@ case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit dr
     import javax.imageio.ImageIO
     ImageIO.write(bufferedImage, "png", file.toJava)
 
-    println("shot: " + file)
+    logger.debug("shot: " + file)
   }
 
 }

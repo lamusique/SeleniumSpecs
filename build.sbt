@@ -23,4 +23,9 @@ libraryDependencies += "com.github.pathikrit" %% "better-files" % "3.4.0" withSo
 libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "2.18.0" withSources()
 
 
+libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3" withSources()
+libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.8.0" withSources()
+
+
+
 scalacOptions in Test ++= Seq("-Yrangepos")

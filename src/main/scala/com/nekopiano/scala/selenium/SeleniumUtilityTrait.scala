@@ -5,6 +5,7 @@
  */
 package com.nekopiano.scala.selenium
 
+import com.typesafe.scalalogging.LazyLogging
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
@@ -20,7 +21,7 @@ import org.openqa.selenium.support.ui.Select
  *
  * @author nekopiano
  */
-trait SeleniumUtilityTrait {
+trait SeleniumUtilityTrait extends LazyLogging {
 
   implicit var screenShotsBaseDirPath = ""
   implicit var driver: RemoteWebDriver = null

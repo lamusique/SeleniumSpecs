@@ -52,7 +52,7 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 //      imageDir.createIfNotExists(createParents = true)
     if (!imageDir.exists) {
       mkdirs(imageDir)
-      System.out.println("Create Folder:" + imageDir)
+      logger.debug("Create Folder:" + imageDir)
     }
 
     def after = {
@@ -69,7 +69,9 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
       val testName = "view-google"
       val screenShooter = ScreenShooter(testName, screenShotsBaseDirPath)
 
-      //driver.get("http://www.google.com")     
+      logger.debug("Try to go to Google.")
+
+      //driver.get("http://www.google.com")
       go to "http://www.google.com"
 
       waitVisibility("//img[@id='hplogo']")
