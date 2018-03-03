@@ -1,5 +1,5 @@
 /**
-  * Copyright (c) 2013-2014 nekopiano, Neko Piano
+  * Copyright (c) 2013-2018 nekopiano, Neko Piano
   * All rights reserved.
   * http://www.nekopiano.com
   */
@@ -13,17 +13,38 @@ import java.util.concurrent.atomic.AtomicInteger
 import org.openqa.selenium.TakesScreenshot
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.openqa.selenium.OutputType
+
 import better.files._
 import better.files.Dsl._
-import com.github.nscala_time.time.Imports._
+
+// to evade a naming conflict
+//import com.github.nscala_time.time.Imports._
+import com.github.nscala_time.time.Imports.DateTime
+import com.github.nscala_time.time.Imports.DateTimeFormat
+
 import com.typesafe.scalalogging.LazyLogging
+
+import scala.concurrent._
+import scala.concurrent.duration._
+
+//import java.io.{File => JFile}
 
 /**
   * ScreenShooter.
   *
   * @author nekopiano
   */
-case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit driver: RemoteWebDriver) extends LazyLogging {
+case class ScreenShooter(testName:String, imageFileDirPath: String)(implicit driver: RemoteWebDriver) extends LazyLogging {
+
+  {
+    val imageDir = File(imageFileDirPath)
+    //      imageDir.createIfNotExists(createParents = true)
+    if (!imageDir.exists) {
+      mkdirs(imageDir)
+      logger.debug("Create Folder:" + imageDir)
+    }
+  }
+
 
   object Counter {
     val counter = new AtomicInteger()
@@ -82,7 +103,7 @@ case class ScreenShooter(testName: String, baseImageDirPath: String)(implicit dr
       g.dispose()
     }
 
-    val file = baseImageDirPath / (testNo + ".png")
+    val file = imageFileDirPath / (testNo + ".png")
     import javax.imageio.ImageIO
     ImageIO.write(bufferedImage, "png", file.toJava)
 

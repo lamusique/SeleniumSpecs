@@ -6,6 +6,8 @@
 package com.nekopiano.scala.selenium
 
 import com.typesafe.scalalogging.LazyLogging
+
+import collection.JavaConverters._
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.interactions.Actions
@@ -16,6 +18,9 @@ import org.openqa.selenium.WebDriver
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.support.ui.Select
 
+import scala.concurrent._
+import scala.concurrent.duration._
+
 /**
  * SeleniumUtilityTrait.
  *
@@ -23,8 +28,19 @@ import org.openqa.selenium.support.ui.Select
  */
 trait SeleniumUtilityTrait extends LazyLogging {
 
-  implicit var screenShotsBaseDirPath = ""
-  implicit var driver: RemoteWebDriver = null
+  // Every scope is in a new instance of this class by Specs2.
+
+//  implicit var screenShotsBaseDirPath = ""
+//  val screenShotsBaseDirPath = Promise[String]
+//  implicit var driver: RemoteWebDriver = null
+  //val driver = Promise[RemoteWebDriver]
+
+//  val seleniumSystemPromise = Promise[SeleniumSystem]
+//  lazy val seleniumSystem = Await.result(seleniumSystemPromise.future, 3 seconds)
+//
+//  val screenShooterPromise = Promise[ScreenShooter]
+//  lazy val screenShooter = Await.result(screenShooterPromise.future, 3 seconds)
+
 
   // element operations
 
@@ -61,24 +77,21 @@ trait SeleniumUtilityTrait extends LazyLogging {
   }
 
   def getElements(by: By)(implicit driver: RemoteWebDriver) = {
-    import collection.JavaConversions._
     val elements = driver.findElements(by)
     println("getElements: " + by + " got elements=" + elements)
-    elements.toSeq
+    elements.asScala.toSeq
   }
 
   def getFirstElement(by: By)(implicit driver: RemoteWebDriver) = {
-    import collection.JavaConversions._
-    val element = driver.findElements(by).head
+    val element = driver.findElements(by).asScala.head
     println("getFirstElement: " + by + " got an element=" + element)
     element
   }
 
   def getSingleElement(by: By)(implicit driver: RemoteWebDriver) = {
-    import collection.JavaConversions._
     val elements = driver.findElements(by)
     if (elements.size > 1) { throw new IllegalArgumentException(by + " could get several elements! Please specify one element. elements=" + elements) }
-    val element = elements.head
+    val element = elements.asScala.head
     println("getSingleElement: " + by + " got an element=" + element)
     element
   }
@@ -113,6 +126,28 @@ trait SeleniumUtilityTrait extends LazyLogging {
     waitVisibilityBy(by, sec)
     getFirstElement(by)
   }
+
+  // implicit conversion
+
+  implicit class ImplicitWebElement(val e: WebElement) {
+
+    def waitVisibility(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver): Unit
+      = SeleniumUtilityTrait.this.waitVisibility(xPath, sec)
+    def waitInvisibility(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver): Unit
+    = SeleniumUtilityTrait.this.waitInvisibility(xPath, sec)
+
+    def getElements(xPath: String)(implicit driver: RemoteWebDriver)
+      = SeleniumUtilityTrait.this.getElements(xPath)
+    def getFirstElement(xPath: String)(implicit driver: RemoteWebDriver)
+      = SeleniumUtilityTrait.this.getFirstElement(xPath)
+
+    def waitAndGetFirstElement(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver)
+      = SeleniumUtilityTrait.this.waitAndGetFirstElement(xPath, sec)
+    def waitAndGetElements(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver)
+      = SeleniumUtilityTrait.this.waitAndGetElements(xPath, sec)
+
+  }
+
 
   // miscellaneous
 
@@ -171,6 +206,22 @@ trait SeleniumUtilityTrait extends LazyLogging {
     def to(url: String)(implicit driver: WebDriver) {
       driver.get(url)
     }
+  }
+
+
+  // utilities
+
+  // grouping needs to sandwiches it with ^ and $.
+  val classNameOnly = "^.*\\.([A-Z]{1}[A-za-z0-9]*)\\$*[^\\.]*$".r
+
+  def getTestClassName() = {
+
+    val fqcn = this.getClass.getName
+    // e.g.
+    // com.nekopiano.scala.selenium.GoogleSpecs$$anon$1
+
+    val className = Option(fqcn) collect { case classNameOnly(group) => group }
+    className.getOrElse("UnnamedTestClass")
   }
 
 }

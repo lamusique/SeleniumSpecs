@@ -1,3 +1,8 @@
+/**
+  * Copyright (c) 2013-2018 nekopiano, Neko Piano
+  * All rights reserved.
+  * http://www.nekopiano.com
+  */
 package com.nekopiano.scala.selenium
 
 import com.typesafe.scalalogging.LazyLogging

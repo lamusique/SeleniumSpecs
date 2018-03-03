@@ -12,6 +12,7 @@ import org.openqa.selenium.Dimension
 import org.openqa.selenium.Point
 import better.files._
 import better.files.Dsl._
+import com.nekopiano.scala.selenium.SeleniumSystem.Browser
 
 
 /**
@@ -26,39 +27,54 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
   // This prevents parallel execution.
   sequential
 
-  lazy val currentOS = OS.currentOS
+  // Every scope is in a new instance of this class by Specs2.
+
+
+
 
   trait scope extends Scope with After {
 
-    val path = currentOS match {
-      case OS.Mac => "/webdrivers/chromedriver"
-      case OS.Windows => "\\webdrivers\\chromedriver.exe"
-      case OS.Linux => "/webdrivers/chromedriver"
-      case _ => "/webdrivers/chromedriver"
-    }
+//    val path = OS.currentOS match {
+//      case OS.Mac => "/webdrivers/chromedriver"
+//      case OS.Windows => "\\webdrivers\\chromedriver.exe"
+//      case OS.Linux => "/webdrivers/chromedriver"
+//      case _ => "/webdrivers/chromedriver"
+//    }
 
-    System.setProperty("webdriver.chrome.driver",
-      OS.currentPath + path)
-    driver = new ChromeDriver()
+    // Any values are shared into scopes afterwards.
+    val hereIsAScopeBeforeExcuting = "Here is a scope before excuting."
 
+
+    //seleniumSystemPromise success SeleniumSystem(Browser.Chrome, path)
+    val seleniumSystem = SeleniumSystem(Browser.Chrome, path)
+
+    lazy val path = OS.currentPath + OS.currentOS.separator + "webdrivers"
+    // if without lazy, forward reference will be null
+    //val path = OS.currentPath + OS.currentOS.separator + "webdrivers"
+
+
+
+//    System.setProperty("webdriver.chrome.driver",
+//      OS.currentPath + path)
+//
+//        driver = new ChromeDriver
+
+    //    driver success new ChromeDriver
+    //    driver.future
+
+    implicit val driver = seleniumSystem.createDriver()
     driver.manage.window.maximize
     driver.manage.window.setPosition(new Point(0, 0))
     driver.manage.window.setSize(new Dimension(1024, 768))
 
-    val q = "TC-01"
-    screenShotsBaseDirPath = OS.currentPath + currentOS.separator + "ScreenShots" + currentOS.separator + q
+    val subDirName = getTestClassName()
 
-    val imageDir = File(screenShotsBaseDirPath)
-//      imageDir.createIfNotExists(createParents = true)
-    if (!imageDir.exists) {
-      mkdirs(imageDir)
-      logger.debug("Create Folder:" + imageDir)
-    }
+    val screenShotsBaseDirPath = OS.currentPath + OS.currentOS.separator + "ScreenShots" + OS.currentOS.separator + subDirName
+    val screenShooter = ScreenShooter("view-google", screenShotsBaseDirPath)
 
     def after = {
       // post process
-      driver.close
-      driver.quit
+      seleniumSystem.exit
     }
   }
 
@@ -66,15 +82,19 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
     "be searched" in new scope {
 
-      val testName = "view-google"
-      val screenShooter = ScreenShooter(testName, screenShotsBaseDirPath)
+      logger.debug(hereIsAScopeBeforeExcuting)
+
+      val testScenario = "view-google"
 
       logger.debug("Try to go to Google.")
 
       //driver.get("http://www.google.com")
       go to "http://www.google.com"
 
-      waitVisibility("//img[@id='hplogo']")
+      // Doodle hides the default logo.
+      //waitVisibility("//img[@id='hplogo']")
+      waitVisibility("//input[@type='submit']")
+
       screenShooter.takeScreenShot()
       screenShooter.takeScreenShot(true)
       screenShooter.takeScreenShot("open a Google front page")
