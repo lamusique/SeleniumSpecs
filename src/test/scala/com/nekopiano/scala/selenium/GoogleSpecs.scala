@@ -34,13 +34,6 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
 
   trait scope extends Scope with After {
 
-//    val path = OS.currentOS match {
-//      case OS.Mac => "/webdrivers/chromedriver"
-//      case OS.Windows => "\\webdrivers\\chromedriver.exe"
-//      case OS.Linux => "/webdrivers/chromedriver"
-//      case _ => "/webdrivers/chromedriver"
-//    }
-
     // Any values are shared into scopes afterwards.
     val hereIsAScopeBeforeExcuting = "Here is a scope before excuting."
 
@@ -52,15 +45,6 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     // if without lazy, forward reference will be null
     //val path = OS.currentPath + OS.currentOS.separator + "webdrivers"
 
-
-
-//    System.setProperty("webdriver.chrome.driver",
-//      OS.currentPath + path)
-//
-//        driver = new ChromeDriver
-
-    //    driver success new ChromeDriver
-    //    driver.future
 
     implicit val driver = seleniumSystem.createDriver()
     driver.manage.window.maximize

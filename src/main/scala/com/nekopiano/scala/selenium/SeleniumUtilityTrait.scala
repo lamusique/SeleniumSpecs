@@ -30,18 +30,6 @@ trait SeleniumUtilityTrait extends LazyLogging {
 
   // Every scope is in a new instance of this class by Specs2.
 
-//  implicit var screenShotsBaseDirPath = ""
-//  val screenShotsBaseDirPath = Promise[String]
-//  implicit var driver: RemoteWebDriver = null
-  //val driver = Promise[RemoteWebDriver]
-
-//  val seleniumSystemPromise = Promise[SeleniumSystem]
-//  lazy val seleniumSystem = Await.result(seleniumSystemPromise.future, 3 seconds)
-//
-//  val screenShooterPromise = Promise[ScreenShooter]
-//  lazy val screenShooter = Await.result(screenShooterPromise.future, 3 seconds)
-
-
   // element operations
 
   def waitVisibility(xPath: String, sec: Long = 5)(implicit driver: RemoteWebDriver): Unit = {

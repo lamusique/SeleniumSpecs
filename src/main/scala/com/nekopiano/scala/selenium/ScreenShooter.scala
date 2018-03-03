@@ -27,8 +27,6 @@ import com.typesafe.scalalogging.LazyLogging
 import scala.concurrent._
 import scala.concurrent.duration._
 
-//import java.io.{File => JFile}
-
 /**
   * ScreenShooter.
   *
