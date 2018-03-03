@@ -5,41 +5,27 @@
  */
 package com.nekopiano.scala.selenium
 
+import com.nekopiano.scala.selenium.SeleniumSystem.Browser
+import org.openqa.selenium.{Dimension, Point}
 import org.specs2.mutable.{After, Specification}
 import org.specs2.specification.Scope
-import org.openqa.selenium.Dimension
-import org.openqa.selenium.Point
-import com.nekopiano.scala.selenium.SeleniumSystem.Browser
 
 
 /**
- * Google Specs.<br>
+ * Several Sites Specs.<br>
  * This shows the usage.
  *
  * @author nekopiano
  */
-//@RunWith(classOf[JUnitRunner])
-class GoogleSpecs extends Specification with SeleniumUtilityTrait {
+class SeveralSitesSpecs extends Specification with SeleniumUtilityTrait {
 
-  // This prevents parallel execution.
   sequential
-
-  // Every scope is in a new instance of this class by Specs2.
-
 
   trait scope extends Scope with After {
 
-    // Any values are shared into scopes afterwards.
-    val hereIsAScopeBeforeExcuting = "Here is a scope before excuting."
-
-
-    //seleniumSystemPromise success SeleniumSystem(Browser.Chrome, path)
     val seleniumSystem = SeleniumSystem(Browser.Chrome, path)
 
     lazy val path = OS.currentPath + OS.currentOS.separator + "webdrivers"
-    // if without lazy, forward reference will be null
-    //val path = OS.currentPath + OS.currentOS.separator + "webdrivers"
-
 
     implicit val driver = seleniumSystem.createDriver()
     driver.manage.window.maximize
@@ -47,37 +33,23 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
     driver.manage.window.setSize(new Dimension(1024, 768))
 
     val subDirName = getTestClassName()
-
     val screenShotsBaseDirPath = OS.currentPath + OS.currentOS.separator + "ScreenShots" + OS.currentOS.separator + subDirName
-    val screenShooter = ScreenShooter("view-google", screenShotsBaseDirPath)
 
     def after = {
-      // post process
       seleniumSystem.exit
     }
   }
 
-  "Google web site" should {
+  "Selenium and Specs2 on to several sites" should {
 
-    "be searched" in new scope {
+    "work on Google" in new scope {
 
-      logger.debug(hereIsAScopeBeforeExcuting)
-
-      val testScenario = "view-google"
-
-      logger.debug("Try to go to Google.")
-
-      //driver.get("http://www.google.com")
       go to "http://www.google.com"
 
-      // Doodle hides the default logo.
-      //waitVisibility("//img[@id='hplogo']")
       waitVisibility("//input[@type='submit']")
 
+      val screenShooter = ScreenShooter("view-google", screenShotsBaseDirPath, true)
       screenShooter.takeScreenShot()
-      screenShooter.takeScreenShot(true)
-      screenShooter.takeScreenShot("open a Google front page")
-      screenShooter.takeScreenShot("日本語: グーグル")
 
       val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
@@ -90,6 +62,29 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
       waitVisibility("//td[@class='b navend']")
       screenShooter.takeScreenShot("search results")
     }
+
+    "work on Bing" in new scope {
+
+      go to "http://www.bing.com"
+
+      waitVisibility("//input[@type='search']")
+
+      val screenShooter = ScreenShooter("view-bing", screenShotsBaseDirPath, true)
+      screenShooter.takeScreenShot()
+
+      val form = waitAndGetFirstElement("//input[@type='search']")
+      form.sendKeys("nekopiano")
+      waitAndGetFirstElement("//input[@type='submit']").submit
+
+      waitVisibility("//ol[@id='b_results']")
+      screenShooter.takeScreenShot("search")
+
+      scroll(1400)
+      waitVisibility("//nav[@role='navigation']")
+      screenShooter.takeScreenShot("search results")
+    }
+
+
   }
 
 }

@@ -32,7 +32,7 @@ import scala.concurrent.duration._
   *
   * @author nekopiano
   */
-case class ScreenShooter(testName:String, imageFileDirPath: String)(implicit driver: RemoteWebDriver) extends LazyLogging {
+case class ScreenShooter(testName:String, imageFileDirPath: String, shouldStamp: Boolean = false)(implicit driver: RemoteWebDriver) extends LazyLogging {
 
   {
     val imageDir = File(imageFileDirPath)
@@ -54,11 +54,12 @@ case class ScreenShooter(testName:String, imageFileDirPath: String)(implicit dri
     }
   }
 
+
   def takeScreenShot(message: String) {
     takeScreenShot(true, message)
   }
 
-  def takeScreenShot(shouldStamp: Boolean = false, message: String = null) {
+  def takeScreenShot(shouldStamp: Boolean = this.shouldStamp, message: String = null) {
 
     val takesScreenShot = driver.asInstanceOf[TakesScreenshot]
     val bytes = takesScreenShot.getScreenshotAs(OutputType.BYTES)
