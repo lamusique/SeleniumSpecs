@@ -1,6 +1,8 @@
 package com.nekopiano.scala.chars
 
-class HalfWidthSpecs extends org.specs2.mutable.Specification {
+class CharUtilSpecs extends org.specs2.mutable.Specification {
+
+  import CharUtil._
 
   "Width detecting should" >> {
     "work in case a" >> {
@@ -55,20 +57,6 @@ class HalfWidthSpecs extends org.specs2.mutable.Specification {
       expected == result
     }
 
-  }
-
-  def isFullWidth(c: Char) = {
-    Character.getName(c) match {
-      // no name coerces to regard as full width
-      case null => true
-      case c if c.startsWith("FULLWIDTH") => true
-      case c if c.startsWith("HALFWIDTH") => false
-      case c if c.startsWith("HIRAGANA") => true
-      case c if c.startsWith("KATAKANA") => true
-      case c if c.startsWith("HANGUL") => true
-      case c if c.startsWith("CJK") => true
-      case _ => false
-    }
   }
 
 }
