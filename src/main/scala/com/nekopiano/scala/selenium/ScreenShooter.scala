@@ -92,22 +92,18 @@ case class ScreenShooter(testName:String, imageFileDirPath: String, shouldStamp:
       val margin = 10
       val descender = 4
 
-      optMessage match {
-        case Some(message) => {
-          g.setColor(new Color(255, 0, 0, 127))
-          g.fillRect(0, bufferedImage.getHeight - fontHeight * 3, width + margin * 2, fontHeight * 3)
-          g.setColor(new Color(255, 255, 255, 255))
-          g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight * 2 - descender)
-          g.drawString(testNo, 0, bufferedImage.getHeight - fontHeight - descender)
-          g.drawString(message, 0, bufferedImage.getHeight - descender)
-        }
-        case None => {
-          g.setColor(new Color(255, 0, 0, 127))
-          g.fillRect(0, bufferedImage.getHeight - fontHeight * 2, width + margin * 2, fontHeight * 2)
-          g.setColor(new Color(255, 255, 255, 255))
-          g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight - descender)
-          g.drawString(testNo, 0, bufferedImage.getHeight - descender)
-        }
+      val lineSize = optMessage match {
+        case Some(message) => 3
+        case None => 2
+      }
+
+      g.setColor(new Color(255, 0, 0, 127))
+      g.fillRect(0, bufferedImage.getHeight - fontHeight * lineSize, width + margin * 2, fontHeight * lineSize)
+      g.setColor(new Color(255, 255, 255, 255))
+      g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight * (lineSize - 1) - descender)
+      g.drawString(testNo, 0, bufferedImage.getHeight - fontHeight * (lineSize - 2) - descender)
+      if (lineSize > 2) {
+        g.drawString(message, 0, bufferedImage.getHeight - descender)
       }
 
       g.dispose()
