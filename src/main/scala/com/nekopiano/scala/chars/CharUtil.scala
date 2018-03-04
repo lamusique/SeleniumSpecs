@@ -18,6 +18,8 @@ object CharUtil {
       case c if c.startsWith("KATAKANA") => true
       case c if c.startsWith("HANGUL") => true
       case c if c.startsWith("CJK") => true
+      // ignore emojis at this time
+      // regard others as half widths
       case _ => false
     }
   }
