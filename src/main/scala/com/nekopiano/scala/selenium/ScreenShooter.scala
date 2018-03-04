@@ -95,26 +95,18 @@ case class ScreenShooter(testName:String, imageFileDirPath: String, shouldStamp:
       optMessage match {
         case Some(message) => {
           g.setColor(new Color(255, 0, 0, 127))
-          //g.fillRect(bufferedImage.getWidth - width + margin, 5, width + margin, 80)
           g.fillRect(0, bufferedImage.getHeight - fontHeight * 3, width + margin * 2, fontHeight * 3)
           g.setColor(new Color(255, 255, 255, 255))
-//          g.drawString(testNo, bufferedImage.getWidth - width, 50)
-//          g.drawString(message, bufferedImage.getWidth - width, 75)
+          g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight * 2 - descender)
           g.drawString(testNo, 0, bufferedImage.getHeight - fontHeight - descender)
           g.drawString(message, 0, bufferedImage.getHeight - descender)
-
-          //      g.drawString(startLocaleTimestamp, bufferedImage.getWidth - width, 25)
-          g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight * 2 - descender)
         }
         case None => {
           g.setColor(new Color(255, 0, 0, 127))
-//          g.fillRect(bufferedImage.getWidth - width + margin, 5, width + margin, 30)
           g.fillRect(0, bufferedImage.getHeight - fontHeight * 2, width + margin * 2, fontHeight * 2)
-
           g.setColor(new Color(255, 255, 255, 255))
-          g.drawString(testNo, 0, bufferedImage.getHeight - descender)
-          //      g.drawString(startLocaleTimestamp, bufferedImage.getWidth - width, 25)
           g.drawString(startLocaleTimestamp, 0, bufferedImage.getHeight - fontHeight - descender)
+          g.drawString(testNo, 0, bufferedImage.getHeight - descender)
         }
       }
 
