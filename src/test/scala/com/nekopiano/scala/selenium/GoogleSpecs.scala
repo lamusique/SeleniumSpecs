@@ -78,6 +78,8 @@ class GoogleSpecs extends Specification with SeleniumUtilityTrait {
       screenShooter.takeScreenShot(true)
       screenShooter.takeScreenShot("open a Google front page")
       screenShooter.takeScreenShot("日本語: グーグル")
+      screenShooter.takeScreenShot("open a Google front page and a long message here long long long long long long long long long long long long long long long.")
+      screenShooter.takeScreenShot("日本語: グーグル。長いメッセージをここに。長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い、長い。")
 
       val form = waitAndGetFirstElement("//input[@id='lst-ib']")
       form.sendKeys("nekopiano")
