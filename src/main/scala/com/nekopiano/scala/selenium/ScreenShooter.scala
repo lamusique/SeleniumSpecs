@@ -64,7 +64,7 @@ case class ScreenShooter(testName:String, imageFileDirPath: String, shouldStamp:
     val takesScreenShot = driver.asInstanceOf[TakesScreenshot]
     val bytes = takesScreenShot.getScreenshotAs(OutputType.BYTES)
     val shotDateTime = DateTime.now
-    val startLocaleTimestamp = DateTimeFormat.forPattern("HH:mm:ss dd MMM yyyy").withLocale(Locale.UK).print(shotDateTime)
+    val startLocaleTimestamp = DateTimeFormat.forPattern("HH:mm:ss EEE dd MMM yyyy").withLocale(Locale.UK).print(shotDateTime)
     val number = Counter.countFixedDigit
     val testNo = testName + '-' + number
 
