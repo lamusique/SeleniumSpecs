@@ -84,7 +84,7 @@ trait SeleniumUtilityTrait extends LazyLogging {
     element
   }
 
-  def existsElement(driver: RemoteWebDriver, xPath: String) = {
+  def existsElement(xPath: String)(implicit driver: RemoteWebDriver) = {
     val element = driver.findElements(By.xpath(xPath))
     println("check element=" + element)
     !element.isEmpty
